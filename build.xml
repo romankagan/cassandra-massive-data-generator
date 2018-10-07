@@ -1,0 +1,45 @@
+<project name="solr_stress" default="jar" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <description>Solr Stress</description>
+
+    <property name="src" location="src" />
+    <property name="build" location="build" />
+    <property name="build.classes" location="${build}/classes" />
+
+    <property name="dse.base" location="../.." />
+
+
+    <target name="init">
+      <tstamp />
+      <mkdir dir="${build}" />
+      <mkdir dir="${build}/output" />
+      <mkdir dir="${build.classes}" />
+    </target>
+
+    <path id="stress.classpath">
+      <pathelement location="${build.classes}" />
+
+      <fileset dir="${dse.base}">
+	<exclude name="logs/**"/>
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+
+    <target name="compile" depends="init">
+      <javac debug="true" destdir="${build.classes}">
+        <src path="${src}" />
+        <classpath refid="stress.classpath" />
+      </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+      <jar jarfile="solr_stress.jar" basedir="${build.classes}" />
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}" />
+        <delete dir="${lib}" />
+        <delete file="solr_stress.jar" />
+    </target>
+
+</project>
